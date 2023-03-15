@@ -1,0 +1,49 @@
+name: 编译部署
+
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    deploy:
+        name: 编译部署
+        runs-on: ubuntu-latest
+
+        permissions:
+            contents: write
+
+        steps:
+            - name: 拉取代码
+              uses: actions/checkout@v2
+              with:
+                  fetch-depth: 1
+
+            - name: 搭建环境
+              uses: actions/setup-node@v2
+              with:
+                  cache: yarn
+
+            - name: 安装依赖
+              run: yarn --frozen-lockfile
+
+            - name: 编译项目
+              run: yarn vite build --base /$REPO_NAME/
+              env:
+                  REPO_NAME: ${{ github.event.repository.name }}
+
+            - name: 部署项目
+              run: |
+                  cd dist/client
+                  touch .nojekyll
+                  cp index.html 404.html
+                  git init
+                  git config user.name $GITHUB_ACTOR
+                  git config user.email $GITHUB_ACTOR@github.com
+                  git add .
+                  git commit -m 'update'
+                  git push https://x-access-token:$GITHUB_TOKEN@github.com/$GITHUB_REPO.git HEAD:gh-pages -f
+              env:
+                  GITHUB_ACTOR: ${{ github.actor }}
+                  GITHUB_TOKEN: ${{ github.token }}
+                  GITHUB_REPO: ${{ github.repository }}

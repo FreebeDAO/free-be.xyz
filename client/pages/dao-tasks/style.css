@@ -1,0 +1,141 @@
+.header-cover {
+    height: 120px;
+    background: #aaa;
+}
+
+.header-content {
+    margin: -40px auto 0;
+    width: 960px;
+}
+
+.header-logo {
+    width: 80px;
+    height: 80px;
+    border: 1px solid #000;
+}
+
+.header-logo-image {
+    width: 100%;
+    height: 100%;
+}
+
+.header-title {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.header-title-text {
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 28px;
+}
+
+.header-title-edit {
+    margin-left: 12px;
+}
+
+.header-description {
+    margin-top: 8px;
+    line-height: 18px;
+    font-size: 16px;
+    color: #9f9fad;
+}
+
+.nav-tabs {
+    margin: 48px auto 0;
+    width: 960px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.nav-tab {
+    height: 32px;
+    padding: 0 30px;
+    line-height: 32px;
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(19,20,21,.6);
+    cursor: pointer;
+}
+
+.nav-tab-active {
+    border-radius: 16px;
+    background: #060608;
+    color: #fff;
+}
+
+.toolbar {
+    margin: 32px auto 0;
+    width: 960px;
+    display: flex;
+    align-items: center;
+}
+
+.toolbar-search {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.toolbar-search-button {
+    margin-left: 8px;
+}
+
+.toolbar-float {
+    width: 0;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.toolbar-create {
+    height: 40px;
+    padding: 0 30px;
+    border-radius: 20px;
+    background: #060608;
+    line-height: 40px;
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.task-table {
+    margin: 24px auto 0;
+    width: 960px;
+}
+
+.task-table table {
+    width: 100%;
+    border-spacing: 0;
+}
+
+.task-table-head tr {
+    height: 48px;
+}
+
+.task-table-head th {
+    text-align: left;
+    font-size: 14px;
+    line-height: 22px;
+    color: #71718a;
+}
+
+.task-table-body tr {
+    height: 56px;
+    cursor: pointer;
+}
+
+.task-table-body tr:hover {
+    background: #f1f5f9;
+}
+
+.task-table-body td {
+    text-align: left;
+    font-size: 14px;
+    line-height: 22px;
+    color: #131415;
+}

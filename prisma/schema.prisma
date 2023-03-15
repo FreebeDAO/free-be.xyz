@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./db.sqlite"
+}
+
+/// 用户表
+model User {
+  /// 标识
+  id      Int    @id @default(autoincrement())
+  /// 账号
+  account String @unique
+  /// 用户名
+  name    String
+  /// 头像
+  avatar  String
+}
+
+/// 钱包表
+model Wallet {
+  /// 标识
+  id      Int    @id @default(autoincrement())
+  /// 地址
+  address String @unique
+  /// 所属用户 > User.id
+  user_id Int
+}
+
+/// 组织表
+model Dao {
+  /// 标识
+  id         Int    @id @default(autoincrement())
+  /// 创建人 > User.id
+  creator_id Int
+  /// 账号
+  account    String @unique
+  /// 图标
+  logo       String
+  /// 组织名
+  name       String
+  /// 描述
+  mission    String
+  /// 主题色
+  color      String
+}
+
+/// 任务表
+model Task {
+  /// 标识
+  id          Int    @id @default(autoincrement())
+  /// 创建人 > User.id
+  creator_id  Int
+  /// 所属组织 > Dao.id
+  dao_id      Int
+  /// 任务名
+  name        String
+  /// 截止时间
+  deadline    String
+  /// 奖励积分
+  reward      Int
+  /// 指派给 > User.id
+  assignee_id Int?
+  /// 任务目标
+  objective   String
+  /// 关键结果
+  key_results String
+  /// 任务状态 [1:created, 2:assigned, 3:reviewing, 4:finished]
+  status      Int
+}
+
+/// 任务变更表
+model TaskChange {
+  /// 标识
+  id      Int    @id @default(autoincrement())
+  /// 所属任务 > Task.id
+  task_id Int
+  /// 记录
+  log     String
+  /// 变更类型 [1:create, 2:assign, 3:update, 4:review, 5:approve]
+  type    Int
+}
+
+/// 任务奖励表
+model TaskReward {
+  /// 标识
+  id      Int @id @default(autoincrement())
+  /// 所属组织 > Dao.id
+  dao_id  Int
+  /// 所属任务 > Task.id
+  task_id Int
+  /// 奖励积分
+  reward  Int
+  /// 发放人 > User.id
+  from_id Int
+  /// 接收人 > User.id
+  to_id   Int
+  /// 奖励状态 [1:created, 2:approved]
+  status  Int
+}

@@ -1,0 +1,15 @@
+.title {
+    margin: 60px auto 0;
+    width: 960px;
+}
+
+.content {
+    margin: 60px auto 0;
+    width: 960px;
+}
+
+.footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}

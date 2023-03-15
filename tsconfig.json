@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "strict": true,
+        "jsx": "react-jsx",
+        "moduleResolution": "Node" /* node_modules */,
+        "module": "ESNext" /* import.meta */,
+        "skipLibCheck": true,
+        "allowSyntheticDefaultImports": true
+    },
+    "include": ["typings.d.ts", "vite.config.ts", "client", "config", "server"]
+}

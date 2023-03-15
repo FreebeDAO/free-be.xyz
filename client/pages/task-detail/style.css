@@ -1,0 +1,28 @@
+.title {
+    margin: 60px auto 0;
+    width: 960px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.title-float {
+    width: 0;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.content {
+    margin: 60px auto 0;
+    width: 960px;
+}
+
+.footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 16px;
+    pointer-events: auto;
+}

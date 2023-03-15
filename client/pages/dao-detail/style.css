@@ -1,0 +1,36 @@
+.user-table {
+    margin: 24px auto 0;
+    width: 960px;
+}
+
+.user-table table {
+    width: 100%;
+    border-spacing: 0;
+}
+
+.user-table-head tr {
+    height: 48px;
+}
+
+.user-table-head th {
+    text-align: left;
+    font-size: 14px;
+    line-height: 22px;
+    color: #71718a;
+}
+
+.user-table-body tr {
+    height: 56px;
+    cursor: pointer;
+}
+
+.user-table-body tr:hover {
+    background: #f1f5f9;
+}
+
+.user-table-body td {
+    text-align: left;
+    font-size: 14px;
+    line-height: 22px;
+    color: #131415;
+}
