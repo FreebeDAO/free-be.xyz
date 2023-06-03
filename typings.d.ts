@@ -27,6 +27,11 @@ namespace Entity {
         };
     }
 
+    interface Reward extends Prisma.TaskReward {
+        dao?: Prisma.Dao;
+        task?: Prisma.Task;
+    }
+
     interface Wallet extends Prisma.Wallet {}
 
     interface Dao extends Prisma.Dao {}

@@ -10,5 +10,6 @@ export { client as $updateDao } from "./controllers/dao/update-dao";
 export { client as $getUser } from "./controllers/user/get-user";
 export { client as $getUserList } from "./controllers/user/get-user-list";
 export { client as $registerUser } from "./controllers/user/register-user";
+export { client as $getUserRewardList } from "./controllers/user/reward/get-user-reward-list";
 export { client as $updateUser } from "./controllers/user/update-user";
 export { client as $verifyUserWallet } from "./controllers/user/wallet/verify-user-wallet";

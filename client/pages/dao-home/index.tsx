@@ -7,7 +7,7 @@ import { pushRoute } from "../../services/router";
 import css from "./style.css?url";
 
 /** 组织详情 */
-function DaoDetailPage(props: { dao: string }) {
+function DaoHomePage(props: { dao: string }) {
     const { dao } = props;
 
     const [state, setState] = useState({
@@ -59,4 +59,4 @@ function DaoDetailPage(props: { dao: string }) {
     );
 }
 
-export { DaoDetailPage };
+export { DaoHomePage };

@@ -187,6 +187,7 @@ const server = async (params: Params, headers = {}) => {
                 reward: task.reward,
                 from_id: task.creator_id,
                 to_id: task.assignee_id ?? 0,
+                created_at: dayjs(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
                 status: 1,
             },
         });
@@ -248,6 +249,7 @@ const server = async (params: Params, headers = {}) => {
         await prisma.taskReward.update({
             where: { id: reward.id },
             data: {
+                updated_at: dayjs(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
                 status: 2,
             },
         });

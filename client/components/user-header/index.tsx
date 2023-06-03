@@ -1,20 +1,17 @@
 import { Button, Spin, message } from "antd";
 import { useEffect, useState } from "react";
-import { $getDaoList, $getUser } from "../../../server";
+import { $getDao, $getUser } from "../../../server";
 import { Entity, Nullable } from "../../../typings";
 import logo from "../../assets/avatar.png";
-import { UICSSWidget } from "../../components/css-widget";
-import { UIDaoCard } from "../../components/dao-card";
 import { popRoute, pushRoute } from "../../services/router";
+import { UICSSWidget } from "../css-widget";
 import css from "./style.css?url";
 
-/** 用户详情 */
-function UserDetailPage(props: { user: string }) {
-    const { user } = props;
+function UIUserHeader(props: { user: string; active: "daos" | "history" }) {
+    const { user, active } = props;
 
     const [state, setState] = useState({
         user: null as Nullable<Entity.User>,
-        daoList: [] as Entity.Dao[],
     });
 
     useEffect(() => {
@@ -26,10 +23,6 @@ function UserDetailPage(props: { user: string }) {
 
             message.error("can not access").then(popRoute);
         });
-
-        $getDaoList({ creator: user }).then((daoList) => {
-            setState((state) => ({ ...state, daoList }));
-        });
     }, []);
 
     if (!state.user) {
@@ -37,7 +30,15 @@ function UserDetailPage(props: { user: string }) {
     }
 
     const editHandler = () => {
-        pushRoute("/settings");
+        pushRoute(`/settings`);
+    };
+
+    const openDaosTab = () => {
+        pushRoute(`/@${user}`, true);
+    };
+
+    const openHistoryTab = () => {
+        pushRoute(`/@${user}/rewards`, true);
     };
 
     return (
@@ -70,21 +71,23 @@ function UserDetailPage(props: { user: string }) {
             </div>
 
             <div className="nav-tabs">
-                <div className="nav-tab nav-tab-active">My DAOs</div>
                 <div
-                    className="nav-tab"
-                    onClick={() => {
-                        message.warning("coming soon");
-                    }}
+                    className={`nav-tab ${
+                        active === "daos" ? "nav-tab-active" : ""
+                    }`}
+                    onClick={openDaosTab}
+                >
+                    My DAOs
+                </div>
+
+                <div
+                    className={`nav-tab ${
+                        active === "history" ? "nav-tab-active" : ""
+                    }`}
+                    onClick={openHistoryTab}
                 >
                     History
                 </div>
-            </div>
-
-            <div className="dao-list">
-                {state.daoList.map((dao, index) => (
-                    <UIDaoCard key={index} dao={dao} />
-                ))}
             </div>
         </UICSSWidget>
     );
@@ -99,4 +102,4 @@ function isCurrentUser(user: string) {
     return false;
 }
 
-export { UserDetailPage };
+export { UIUserHeader };

@@ -6,6 +6,10 @@ const APP_ROUTES = [
     require("../controllers/user/update-user"),
     //#endregion
 
+    //#region reward
+    require("../controllers/user/reward/get-user-reward-list"),
+    //#endregion
+
     //#region wallet
     require("../controllers/user/wallet/verify-user-wallet"),
     //#endregion

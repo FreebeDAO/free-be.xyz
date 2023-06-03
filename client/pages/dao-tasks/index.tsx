@@ -1,4 +1,4 @@
-import { Badge, Button, Input, Tag } from "antd";
+import { Badge, Button, Input, Spin, Tag } from "antd";
 import { useEffect, useState } from "react";
 import { $getDao, $getDaoTaskList } from "../../../server";
 import { Entity, Nullable } from "../../../typings";
@@ -27,6 +27,10 @@ function DaoTasksPage(props: { dao: string }) {
         });
     }, []);
 
+    if (!state.dao) {
+        return <Spin />;
+    }
+
     const createHandler = () => {
         pushRoute(`/${dao}/tasks/new`);
     };
@@ -50,15 +54,14 @@ function DaoTasksPage(props: { dao: string }) {
                 </div>
 
                 <div className="toolbar-float">
-                    <UIUserGuard
-                        className="toolbar-create"
-                        onClick={createHandler}
-                        hidden={
-                            !isCreator(state.dao ? state.dao.creator_id : -1)
-                        }
-                    >
-                        + Create Task
-                    </UIUserGuard>
+                    {isCurrentCreator(state.dao.creator_id) && (
+                        <UIUserGuard
+                            className="toolbar-create"
+                            onClick={createHandler}
+                        >
+                            + Create Task
+                        </UIUserGuard>
+                    )}
                 </div>
             </div>
 
@@ -101,10 +104,10 @@ function DaoTasksPage(props: { dao: string }) {
     );
 }
 
-function isCreator(user_id: number) {
+function isCurrentCreator(creator: number) {
     if (sessionStorage.auth) {
         const auth = JSON.parse(sessionStorage.auth);
-        return auth.id === user_id;
+        return auth.id === creator;
     }
 
     return false;

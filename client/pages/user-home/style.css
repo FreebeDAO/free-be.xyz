@@ -1,0 +1,9 @@
+.dao-list {
+    margin: 32px auto 0;
+    width: 960px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 24px;
+}
