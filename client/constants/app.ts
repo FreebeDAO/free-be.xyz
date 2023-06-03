@@ -1,12 +1,13 @@
 import { CreateDaoPage } from "../pages/create-dao";
 import { CreateTaskPage } from "../pages/create-task";
-import { DaoDetailPage } from "../pages/dao-detail";
 import { DaoDiscoverPage } from "../pages/dao-discover";
+import { DaoHomePage } from "../pages/dao-home";
 import { DaoSettingsPage } from "../pages/dao-settings";
 import { DaoTasksPage } from "../pages/dao-tasks";
 import { TaskDetailPage } from "../pages/task-detail";
-import { UserDetailPage } from "../pages/user-detail";
+import { UserHomePage } from "../pages/user-home";
 import { UserRegisterPage } from "../pages/user-register";
+import { UserRewardsPage } from "../pages/user-rewards";
 import { UserSettingsPage } from "../pages/user-settings";
 
 const APP_ROUTES = {
@@ -25,7 +26,12 @@ const APP_ROUTES = {
 
     用户详情: {
         path: "/user/:user",
-        page: UserDetailPage,
+        page: UserHomePage,
+    },
+
+    用户奖励: {
+        path: "/user/:user/rewards",
+        page: UserRewardsPage,
     },
 
     用户设置: {
@@ -42,7 +48,7 @@ const APP_ROUTES = {
 
     组织详情: {
         path: "/:dao",
-        page: DaoDetailPage,
+        page: DaoHomePage,
     },
 
     组织设置: {
