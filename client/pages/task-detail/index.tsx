@@ -18,6 +18,7 @@ import { $getDaoTask, $getUserList, $updateDaoTask } from "../../../server";
 import { Entity, Nullable } from "../../../typings";
 import { UICSSWidget } from "../../components/css-widget";
 import css from "./style.css?url";
+import { popRoute } from "../../services/router";
 
 /** 任务详情 */
 function TaskDetailPage(props: { dao: string; task: string }) {
@@ -334,6 +335,8 @@ function TaskDetailPage(props: { dao: string; task: string }) {
                         shouldUpdate
                         children={(form) => (
                             <div className="footer">
+                                <Button onClick={popRoute}>Back</Button>
+
                                 {permission.CAN_ASSIGN && (
                                     <Button
                                         type="primary"
