@@ -89,11 +89,11 @@ function DaoTasksPage(props: { dao: string }) {
                                 <td>{task.id}</td>
                                 <td>{task.name}</td>
                                 <td>{task.deadline}</td>
-                                <td>{task.reward}P</td>
-                                <td>{pipeTaskCreator(task)}</td>
-                                <td>{pipeTaskAssignee(task)}</td>
-                                <td>{pipeTaskStatus(task)}</td>
-                                <td>{pipeTaskProcess(task)}</td>
+                                <td>{pipeReward(task)}</td>
+                                <td>{pipeCreator(task)}</td>
+                                <td>{pipeAssignee(task)}</td>
+                                <td>{pipeStatus(task)}</td>
+                                <td>{pipeProcess(task)}</td>
                                 <td>Click To View</td>
                             </tr>
                         ))}
@@ -113,7 +113,13 @@ function isCurrentCreator(creator: number) {
     return false;
 }
 
-const pipeTaskCreator = (task: Entity.Task) => {
+const pipeReward = (task: Entity.Task) => {
+    const num = task.reward ?? 0;
+
+    return <Tag>{num} P</Tag>;
+};
+
+const pipeCreator = (task: Entity.Task) => {
     if (task.creator) {
         return task.creator.name;
     }
@@ -121,7 +127,7 @@ const pipeTaskCreator = (task: Entity.Task) => {
     return "-";
 };
 
-const pipeTaskAssignee = (task: Entity.Task) => {
+const pipeAssignee = (task: Entity.Task) => {
     if (task.assignee) {
         return `@${task.assignee.account}`;
     }
@@ -129,17 +135,23 @@ const pipeTaskAssignee = (task: Entity.Task) => {
     return "-";
 };
 
-const pipeTaskStatus = (task: Entity.Task) => {
-    const color = [, "magenta", "volcano", "gold", "lime"][task.status];
+const pipeStatus = (task: Entity.Task) => {
+    const target = [
+        ,
+        { text: "created", color: "magenta" },
+        { text: "assigned", color: "volcano" },
+        { text: "reviewing", color: "gold" },
+        { text: "finished", color: "lime" },
+    ][task.status];
 
-    const text = [, "created", "assigned", "reviewing", "finished"][
-        task.status
-    ];
+    if (target) {
+        return <Badge color={target.color} text={target.text} />;
+    }
 
-    return <Badge color={color} text={text} />;
+    return "-";
 };
 
-const pipeTaskProcess = (task: Entity.Task) => {
+const pipeProcess = (task: Entity.Task) => {
     const ratio = task.key_results.length
         ? Math.floor(
               (task.key_results.filter((v) => v.checked).length /

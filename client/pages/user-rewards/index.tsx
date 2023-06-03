@@ -4,6 +4,7 @@ import { Entity } from "../../../typings";
 import { UICSSWidget } from "../../components/css-widget";
 import { UIUserHeader } from "../../components/user-header";
 import css from "./style.css?url";
+import { Badge, Tag } from "antd";
 
 /** 用户奖励 */
 function UserRewardsPage(props: { user: string }) {
@@ -25,32 +26,25 @@ function UserRewardsPage(props: { user: string }) {
 
             <div className="reward-table">
                 <table>
-                    <thead className="user-table-head">
+                    <thead className="reward-table-head">
                         <tr>
                             <th>#</th>
                             <th>Task</th>
                             <th>Reward</th>
                             <th>Dao</th>
-                            <th>Create</th>
-                            <th>Update</th>
+                            <th>Time</th>
                             <th>Status</th>
                         </tr>
                     </thead>
-                    <tbody className="user-table-body">
+                    <tbody className="reward-table-body">
                         {state.rewardList.map((reward, index) => (
                             <tr key={index}>
                                 <td>{index + 1}</td>
                                 <td>{reward.task?.name}</td>
-                                <td>{reward.reward ?? 0}P</td>
+                                <td>{pipeReward(reward)}</td>
                                 <td>{reward.dao?.name}</td>
-                                <td>{reward.created_at ?? "-"}</td>
-                                <td>{reward.updated_at ?? "-"}</td>
-                                <td>
-                                    {Reflect.get(
-                                        { 1: "created", 2: "approved" },
-                                        reward.status
-                                    )}
-                                </td>
+                                <td>{pipeTime(reward)}</td>
+                                <td>{pipeStatus(reward)}</td>
                             </tr>
                         ))}
                     </tbody>
@@ -59,5 +53,37 @@ function UserRewardsPage(props: { user: string }) {
         </UICSSWidget>
     );
 }
+
+const pipeReward = (reward: Entity.Reward) => {
+    const num = reward.reward ?? 0;
+
+    return <Tag>{num} P</Tag>;
+};
+
+const pipeTime = (reward: Entity.Reward) => {
+    if (reward.status === 1) {
+        return reward.created_at ?? "-";
+    }
+
+    if (reward.status === 2) {
+        return reward.updated_at ?? "-";
+    }
+
+    return "-";
+};
+
+const pipeStatus = (reward: Entity.Reward) => {
+    const target = [
+        ,
+        { text: "created", color: "red" },
+        { text: "approved", color: "green" },
+    ][reward.status];
+
+    if (target) {
+        return <Badge color={target.color} text={target.text} />;
+    }
+
+    return "-";
+};
 
 export { UserRewardsPage };
