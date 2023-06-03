@@ -155,13 +155,17 @@ function TaskDetailPage(props: { dao: string; task: string }) {
 
     const approveHandler = async () => {
         if (state.task) {
-            return $updateDaoTask({
+            await $updateDaoTask({
                 scene: "approve",
                 approve: {
                     id: state.task.id,
                     dao_id: state.task.dao_id,
                 },
             });
+
+            await message.success("success");
+
+            popRoute();
         }
     };
 
