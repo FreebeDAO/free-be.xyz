@@ -43,6 +43,7 @@ function DaoDiscoverPage() {
             <div className="toolbar">
                 <div className="toolbar-search">
                     <Input
+                        onPressEnter={searchHandler}
                         className="toolbar-search-input"
                         placeholder="search dao name"
                         value={state.search}
