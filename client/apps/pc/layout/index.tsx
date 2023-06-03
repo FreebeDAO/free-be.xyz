@@ -52,7 +52,7 @@ function Layout(props: { children: ReactNode }) {
                             window.open("https://free-be.xyz/", "_blank");
                         }}
                     >
-                        About Us
+                        About FreeBe
                     </div>
                 </div>
 

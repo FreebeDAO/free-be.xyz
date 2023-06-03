@@ -18,6 +18,7 @@ import { $getDaoTask, $getUserList, $updateDaoTask } from "../../../server";
 import { Entity, Nullable } from "../../../typings";
 import { UICSSWidget } from "../../components/css-widget";
 import css from "./style.css?url";
+import { popRoute } from "../../services/router";
 
 /** 任务详情 */
 function TaskDetailPage(props: { dao: string; task: string }) {
@@ -154,13 +155,17 @@ function TaskDetailPage(props: { dao: string; task: string }) {
 
     const approveHandler = async () => {
         if (state.task) {
-            return $updateDaoTask({
+            await $updateDaoTask({
                 scene: "approve",
                 approve: {
                     id: state.task.id,
                     dao_id: state.task.dao_id,
                 },
             });
+
+            await message.success("success");
+
+            popRoute();
         }
     };
 
@@ -334,6 +339,8 @@ function TaskDetailPage(props: { dao: string; task: string }) {
                         shouldUpdate
                         children={(form) => (
                             <div className="footer">
+                                <Button onClick={popRoute}>Back</Button>
+
                                 {permission.CAN_ASSIGN && (
                                     <Button
                                         type="primary"

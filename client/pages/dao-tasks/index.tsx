@@ -1,7 +1,7 @@
 import { Badge, Button, Input, Tag } from "antd";
 import { useEffect, useState } from "react";
-import { $getDaoTaskList } from "../../../server";
-import { Entity } from "../../../typings";
+import { $getDao, $getDaoTaskList } from "../../../server";
+import { Entity, Nullable } from "../../../typings";
 import { UICSSWidget } from "../../components/css-widget";
 import { UIDaoHeader } from "../../components/dao-header";
 import { UIUserGuard } from "../../components/user-guard";
@@ -13,12 +13,17 @@ function DaoTasksPage(props: { dao: string }) {
     const { dao } = props;
 
     const [state, setState] = useState({
+        dao: null as Nullable<Entity.Dao>,
         taskList: [] as Entity.Task[],
     });
 
     useEffect(() => {
+        $getDao({ account: dao }).then((dao) => {
+            setState((state) => ({ ...state, dao }));
+        });
+
         $getDaoTaskList({ account: dao }).then((taskList) => {
-            setState({ taskList });
+            setState((state) => ({ ...state, taskList }));
         });
     }, []);
 
@@ -48,6 +53,9 @@ function DaoTasksPage(props: { dao: string }) {
                     <UIUserGuard
                         className="toolbar-create"
                         onClick={createHandler}
+                        hidden={
+                            !isCreator(state.dao ? state.dao.creator_id : -1)
+                        }
                     >
                         + Create Task
                     </UIUserGuard>
@@ -91,6 +99,15 @@ function DaoTasksPage(props: { dao: string }) {
             </div>
         </UICSSWidget>
     );
+}
+
+function isCreator(user_id: number) {
+    if (sessionStorage.auth) {
+        const auth = JSON.parse(sessionStorage.auth);
+        return auth.id === user_id;
+    }
+
+    return false;
 }
 
 const pipeTaskCreator = (task: Entity.Task) => {
