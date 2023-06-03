@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { $getDaoList } from "../../../server";
 import { Entity } from "../../../typings";
 import { UICSSWidget } from "../../components/css-widget";
+import { UIDaoCard } from "../../components/dao-card";
 import { UIUserGuard } from "../../components/user-guard";
 import { pushRoute } from "../../services/router";
 import css from "./style.css?url";
@@ -24,10 +25,6 @@ function DaoDiscoverPage() {
 
     const createHandler = () => {
         pushRoute("/new");
-    };
-
-    const openHandler = (dao: Entity.Dao) => {
-        pushRoute(`/${dao.account}`);
     };
 
     useEffect(() => {
@@ -77,24 +74,7 @@ function DaoDiscoverPage() {
 
             <div className="dao-list">
                 {state.daoList.map((dao, index) => (
-                    <div
-                        key={index}
-                        className="dao-card"
-                        onClick={() => openHandler(dao)}
-                    >
-                        <div className="dao-card-header">
-                            <div className="dao-avatar">
-                                <img src={dao.logo} />
-                            </div>
-                            <div className="dao-title">{dao.name}</div>
-                            <div className="dao-account">
-                                {`{ ${dao.account} }`}
-                            </div>
-                        </div>
-                        <div className="dao-card-body">
-                            <div className="dao-mission">{dao.mission}</div>
-                        </div>
-                    </div>
+                    <UIDaoCard key={index} dao={dao} />
                 ))}
             </div>
         </UICSSWidget>

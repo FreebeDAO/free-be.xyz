@@ -4,6 +4,7 @@ import { $getDaoList, $getUser } from "../../../server";
 import { Entity, Nullable } from "../../../typings";
 import logo from "../../assets/avatar.png";
 import { UICSSWidget } from "../../components/css-widget";
+import { UIDaoCard } from "../../components/dao-card";
 import { popRoute, pushRoute } from "../../services/router";
 import css from "./style.css?url";
 
@@ -37,10 +38,6 @@ function UserDetailPage(props: { user: string }) {
 
     const editHandler = () => {
         pushRoute("/settings");
-    };
-
-    const openHandler = (dao: Entity.Dao) => {
-        pushRoute(`/${dao.account}/tasks`);
     };
 
     return (
@@ -86,24 +83,7 @@ function UserDetailPage(props: { user: string }) {
 
             <div className="dao-list">
                 {state.daoList.map((dao, index) => (
-                    <div
-                        key={index}
-                        className="dao-card"
-                        onClick={() => openHandler(dao)}
-                    >
-                        <div className="dao-card-header">
-                            <div className="dao-avatar">
-                                <img src={dao.logo} />
-                            </div>
-                            <div className="dao-title">{dao.name}</div>
-                            <div className="dao-account">
-                                {`{ ${dao.account} }`}
-                            </div>
-                        </div>
-                        <div className="dao-card-body">
-                            <div className="dao-mission">{dao.mission}</div>
-                        </div>
-                    </div>
+                    <UIDaoCard key={index} dao={dao} />
                 ))}
             </div>
         </UICSSWidget>
