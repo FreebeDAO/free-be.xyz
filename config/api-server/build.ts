@@ -6,7 +6,7 @@ import { PluginOption } from "vite";
 
 const setup = (): PluginOption => ({
     name: "api-server-build",
-    apply: "build",
+    // apply: "build",
     transform(code, id) {
         const module = id.slice(process.cwd().length);
 
