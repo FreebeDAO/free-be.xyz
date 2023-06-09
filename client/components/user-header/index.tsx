@@ -48,12 +48,15 @@ function UIUserHeader(props: { user: string; active: "daos" | "history" }) {
 
                 <div className="header-content">
                     <div className="header-logo">
-                        <img className="header-logo-image" src={logo} />
+                        <img
+                            className="header-logo-image"
+                            src={state.user.avatar || logo}
+                        />
                     </div>
 
                     <div className="header-title">
                         <div className="header-title-name">
-                            {state.user?.name}
+                            {state.user.name}
                         </div>
 
                         <div className="header-title-account">@{user}</div>

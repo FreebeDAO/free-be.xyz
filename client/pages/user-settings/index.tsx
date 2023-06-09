@@ -1,31 +1,88 @@
-import { Button, Upload } from "antd";
-import COS from "cos-js-sdk-v5";
+import { Button, Card, Form, Input, Spin, message } from "antd";
+import { useEffect, useState } from "react";
+import { $getUser, $updateUser } from "../../../server";
+import { Entity, Nullable } from "../../../typings";
+import { UICSSWidget } from "../../components/css-widget";
+import { UIFileUpload } from "../../components/file-upload";
+import { popRoute } from "../../services/router";
+import css from "./style.css?url";
 
 /** 用户设置 */
 function UserSettingsPage() {
-    const cos = new COS({
-        SecretId: "AKIDgLtOG1hV7kYJvVwJNHMUyNn6Phs6HUr5",
-        SecretKey: "DaVH2lFXbSEqHg7RcdS6Yu41qXAe9pOl",
+    const [state, setState] = useState({
+        user: null as Nullable<Entity.User>,
     });
 
-    return (
-        <>
-            user setting
-            <Upload
-                beforeUpload={(file) => {
-                    cos.putObject({
-                        Bucket: "free-be-1256742492",
-                        Region: "ap-beijing",
-                        Key: "/" + file.name,
-                        Body: file,
-                    });
+    useEffect(() => {
+        if (sessionStorage.auth) {
+            const auth = JSON.parse(sessionStorage.auth);
 
-                    return false;
-                }}
-            >
-                <Button>upload</Button>
-            </Upload>
-        </>
+            $getUser({ account: auth.account }).then((user) => {
+                setState({ user });
+            });
+
+            return;
+        }
+
+        message.error("can not access").then(popRoute);
+    }, []);
+
+    if (!state.user) {
+        return <Spin />;
+    }
+
+    const saveHandler = (values: any) => {
+        $updateUser({
+            ...state.user,
+            ...values,
+            avatar: values.avatar[0],
+        }).then(popRoute);
+    };
+
+    const userURL =
+        location.origin + import.meta.env.BASE_URL + "@" + state.user.account;
+
+    return (
+        <UICSSWidget css={css}>
+            <h1 className="title">User Setting</h1>
+
+            <Card className="content">
+                <Form
+                    layout="vertical"
+                    initialValues={{
+                        ...state.user,
+                        avatar: [],
+                    }}
+                    onFinish={saveHandler}
+                >
+                    <Form.Item label="Your URL">
+                        <a href={userURL} target="_blank">
+                            {userURL}
+                        </a>
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Your display name"
+                        name="name"
+                        rules={[{ required: true }]}
+                    >
+                        <Input placeholder={state.user.name} />
+                    </Form.Item>
+
+                    <Form.Item label="Your avatar" name="avatar">
+                        <UIFileUpload>
+                            <Button>Upload</Button>
+                        </UIFileUpload>
+                    </Form.Item>
+
+                    <div className="footer">
+                        <Button type="primary" htmlType="submit">
+                            Save
+                        </Button>
+                    </div>
+                </Form>
+            </Card>
+        </UICSSWidget>
     );
 }
 

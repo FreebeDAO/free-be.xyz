@@ -5,6 +5,8 @@ const config = defineConfig({
         outDir: "dist/client",
     },
 
+    envPrefix: ["COS_"],
+
     plugins: require("./config").setup(),
 
     server: {

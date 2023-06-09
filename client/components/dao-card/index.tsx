@@ -1,4 +1,5 @@
 import { Entity } from "../../../typings";
+import logo from "../../assets/avatar.png";
 import { pushRoute } from "../../services/router";
 import { UICSSWidget } from "../css-widget";
 import css from "./style.css?url";
@@ -15,7 +16,7 @@ function UIDaoCard(props: { dao: Entity.Dao }) {
             <div className="dao-card" onClick={openHandler}>
                 <div className="dao-card-header">
                     <div className="dao-avatar">
-                        <img src={dao.logo} />
+                        <img src={dao.logo || logo} />
                     </div>
                     <div className="dao-title">{dao.name}</div>
                     {/* <div className="dao-account">{`{ ${dao.account} }`}</div> */}

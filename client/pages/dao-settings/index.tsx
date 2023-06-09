@@ -5,6 +5,7 @@ import { Entity, Nullable } from "../../../typings";
 import { UICSSWidget } from "../../components/css-widget";
 import { popRoute } from "../../services/router";
 import css from "./style.css?url";
+import { UIFileUpload } from "../../components/file-upload";
 
 /** 组织设置 */
 function DaoSettingsPage(props: { dao: string }) {
@@ -36,6 +37,7 @@ function DaoSettingsPage(props: { dao: string }) {
         $updateDao({
             ...state.dao,
             ...values,
+            logo: values.logo[0],
         }).then(popRoute);
     };
 
@@ -52,7 +54,10 @@ function DaoSettingsPage(props: { dao: string }) {
             <Card className="content">
                 <Form
                     layout="vertical"
-                    initialValues={state.dao}
+                    initialValues={{
+                        ...state.dao,
+                        logo: [],
+                    }}
                     onFinish={saveHandler}
                 >
                     <Form.Item label="DAO URL">
@@ -74,9 +79,9 @@ function DaoSettingsPage(props: { dao: string }) {
                         name="logo"
                         tooltip="Recommand size 240x240."
                     >
-                        <Upload>
+                        <UIFileUpload>
                             <Button>Upload</Button>
-                        </Upload>
+                        </UIFileUpload>
                     </Form.Item>
 
                     <Form.Item

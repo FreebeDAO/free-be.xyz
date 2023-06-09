@@ -1,7 +1,8 @@
-import { Button, Card, Form, Input, Upload } from "antd";
+import { Button, Card, Form, Input } from "antd";
 import { useState } from "react";
 import { $createDao } from "../../../server";
 import { UICSSWidget } from "../../components/css-widget";
+import { UIFileUpload } from "../../components/file-upload";
 import { pushRoute } from "../../services/router";
 import css from "./style.css?url";
 
@@ -52,7 +53,7 @@ function CreateDaoPage() {
                     <Form
                         layout="vertical"
                         form={form}
-                        onValuesChange={(values) => {
+                        onValuesChange={(_, values) => {
                             setState((state) => ({
                                 ...state,
                                 ...values,
@@ -102,10 +103,11 @@ function CreateDaoPage() {
                     <Form
                         layout="vertical"
                         form={form}
-                        onValuesChange={(values) => {
+                        onValuesChange={(_, values) => {
                             setState((state) => ({
                                 ...state,
                                 ...values,
+                                logo: values.logo[0],
                             }));
                         }}
                         onFinish={startHandler}
@@ -116,9 +118,9 @@ function CreateDaoPage() {
                             tooltip="Recommand size 240x240."
                             rules={[{ required: false }]}
                         >
-                            <Upload>
+                            <UIFileUpload>
                                 <Button>Upload</Button>
-                            </Upload>
+                            </UIFileUpload>
                         </Form.Item>
 
                         <Form.Item

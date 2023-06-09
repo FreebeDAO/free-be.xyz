@@ -46,7 +46,10 @@ function UIDaoHeader(props: { dao: string; active: "basic" | "tasks" }) {
                         className="header-logo"
                         style={{ borderColor: state.dao.color }}
                     >
-                        <img className="header-logo-image" src={logo} />
+                        <img
+                            className="header-logo-image"
+                            src={state.dao.logo || logo}
+                        />
                     </div>
 
                     <div className="header-title">

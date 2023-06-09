@@ -15,6 +15,11 @@ declare global {
     namespace NodeJS {
         interface ProcessEnv {
             JWT_SECRET: string;
+            COS_SECRET_ID: string;
+            COS_SECRET_KEY: string;
+            COS_BUCKET_NAME: string;
+            COS_BUCKET_REGION: string;
+            COS_BUCKET_PREFIX: string;
         }
     }
 }
