@@ -19,10 +19,17 @@
     width: 960px;
 }
 
-.footer {
+.toolbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    pointer-events: auto;
+    margin-bottom: 24px;
+}
+
+.toolbar-action {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    gap: 16px;
-    pointer-events: auto;
+    gap: 15px;
 }

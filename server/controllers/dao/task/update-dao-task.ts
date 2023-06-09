@@ -69,6 +69,8 @@ const server = async (params: Params, headers = {}) => {
                     Date.now()
                 ).format("YYYY-MM-DD HH:mm:ss")}`,
                 type: 2,
+                creator_id: session.id,
+                created_at: dayjs(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
             },
         });
 
@@ -132,6 +134,8 @@ const server = async (params: Params, headers = {}) => {
                     Date.now()
                 ).format("YYYY-MM-DD HH:mm:ss")}`,
                 type: 3,
+                creator_id: session.id,
+                created_at: dayjs(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
             },
         });
 
@@ -177,6 +181,8 @@ const server = async (params: Params, headers = {}) => {
                     Date.now()
                 ).format("YYYY-MM-DD HH:mm:ss")}`,
                 type: 4,
+                creator_id: session.id,
+                created_at: dayjs(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
             },
         });
 
@@ -232,6 +238,8 @@ const server = async (params: Params, headers = {}) => {
                     Date.now()
                 ).format("YYYY-MM-DD HH:mm:ss")}`,
                 type: 5,
+                creator_id: session.id,
+                created_at: dayjs(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
             },
         });
 

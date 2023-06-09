@@ -3,7 +3,7 @@
         "dev": "vite",
         "build": "vite build",
         "serve": "vite preview",
-        "postinstall": "prisma db push & prisma generate"
+        "postinstall": "prisma db push && prisma generate"
     },
     "devDependencies": {
         "@emotion/babel-plugin": "^11.11.0",

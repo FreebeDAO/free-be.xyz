@@ -74,31 +74,49 @@ model Task {
 /// 任务变更表
 model TaskChange {
   /// 标识
-  id      Int    @id @default(autoincrement())
+  id         Int     @id @default(autoincrement())
   /// 所属任务 > Task.id
-  task_id Int
+  task_id    Int
   /// 记录
-  log     String
+  log        String
   /// 变更类型 [1:create, 2:assign, 3:update, 4:review, 5:approve]
-  type    Int
+  type       Int
+  // 创建人 > User.id
+  creator_id Int
+  /// 创建时间
+  created_at String?
+}
+
+/// 任务评论表
+model TaskComment {
+  /// 标识
+  id         Int     @id @default(autoincrement())
+  /// 所属任务 > Task.id
+  task_id    Int
+  /// 评论内容
+  content    String
+  /// 创建人 > User.id
+  creator_id Int
+  /// 创建时间
+  created_at String?
 }
 
 /// 任务奖励表
 model TaskReward {
   /// 标识
-  id      Int @id @default(autoincrement())
+  id         Int     @id @default(autoincrement())
   /// 所属组织 > Dao.id
-  dao_id  Int
+  dao_id     Int
   /// 所属任务 > Task.id
-  task_id Int
+  task_id    Int
   /// 奖励积分
-  reward  Int
+  reward     Int
   /// 发放人 > User.id
-  from_id Int
+  from_id    Int
   /// 接收人 > User.id
-  to_id   Int
+  to_id      Int
   /// 奖励状态 [1:created, 2:approved]
-  status  Int
+  status     Int
   /// 创建时间
   created_at String?
   /// 更新时间

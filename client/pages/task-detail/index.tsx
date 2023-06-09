@@ -13,12 +13,19 @@ import {
     message,
 } from "antd";
 import dayjs from "dayjs";
-import { useEffect, useState } from "react";
-import { $getDaoTask, $getUserList, $updateDaoTask } from "../../../server";
+import { ChangeEventHandler, useEffect, useState } from "react";
+import {
+    $createDaoTaskComment,
+    $getDaoTask,
+    $getDaoTaskActivityList,
+    $getUserList,
+    $updateDaoTask,
+} from "../../../server";
 import { Entity, Nullable } from "../../../typings";
 import { UICSSWidget } from "../../components/css-widget";
 import css from "./style.css?url";
 import { popRoute } from "../../services/router";
+import { UIUserInfo } from "../../components/user-info";
 
 /** 任务详情 */
 function TaskDetailPage(props: { dao: string; task: string }) {
@@ -27,6 +34,10 @@ function TaskDetailPage(props: { dao: string; task: string }) {
     const [state, setState] = useState({
         task: null as Nullable<Entity.Task>,
         userList: [] as Entity.User[],
+        activityList: [] as Entity.Activity[],
+        comment: {
+            content: "",
+        },
     });
 
     useEffect(() => {
@@ -36,6 +47,10 @@ function TaskDetailPage(props: { dao: string; task: string }) {
 
         $getDaoTask({ dao, task }).then((task) => {
             setState((state) => ({ ...state, task }));
+        });
+
+        $getDaoTaskActivityList({ dao, task }).then((activityList) => {
+            setState((state) => ({ ...state, activityList }));
         });
     }, []);
 
@@ -113,6 +128,18 @@ function TaskDetailPage(props: { dao: string; task: string }) {
 
             return false;
         },
+
+        get CAN_COMMENT() {
+            if (state.task && sessionStorage.auth) {
+                const auth = JSON.parse(sessionStorage.auth);
+
+                if (auth.id) {
+                    return true;
+                }
+            }
+
+            return false;
+        },
     };
 
     const assignHandler = async () => {
@@ -185,6 +212,37 @@ function TaskDetailPage(props: { dao: string; task: string }) {
         }
     };
 
+    const commentSubmitHandler = async () => {
+        if (state.task) {
+            await $createDaoTaskComment({
+                task_id: state.task.id,
+                dao_id: state.task.dao_id,
+                content: state.comment.content,
+            });
+
+            const activityList = await $getDaoTaskActivityList({ dao, task });
+
+            setState((state) => ({
+                ...state,
+                activityList,
+                comment: {
+                    content: "",
+                },
+            }));
+        }
+    };
+
+    const commentChangeHandler: ChangeEventHandler<HTMLTextAreaElement> = (
+        event
+    ) => {
+        setState((state) => ({
+            ...state,
+            comment: {
+                content: event.target.value,
+            },
+        }));
+    };
+
     return (
         <UICSSWidget css={css}>
             <h1 className="title">
@@ -203,6 +261,74 @@ function TaskDetailPage(props: { dao: string; task: string }) {
                         pointerEvents: permission.CAN_UPDATE ? "auto" : "none",
                     }}
                 >
+                    <div className="toolbar">
+                        <Button onClick={popRoute}>Back</Button>
+
+                        <Form.Item
+                            noStyle
+                            shouldUpdate
+                            children={(form) => (
+                                <div className="toolbar-action">
+                                    {permission.CAN_ASSIGN && (
+                                        <Button
+                                            type="primary"
+                                            onClick={createActionHandler(
+                                                assignHandler,
+                                                form
+                                            )}
+                                        >
+                                            Request assign
+                                        </Button>
+                                    )}
+
+                                    {permission.CAN_UPDATE && (
+                                        <Button
+                                            type="primary"
+                                            onClick={createActionHandler(
+                                                updateHandler,
+                                                form
+                                            )}
+                                        >
+                                            Update
+                                        </Button>
+                                    )}
+
+                                    {permission.CAN_REVIEW && (
+                                        <Button
+                                            onClick={createActionHandler(
+                                                reviewHandler,
+                                                form
+                                            )}
+                                            disabled={Boolean(
+                                                state.task?.key_results?.find(
+                                                    (v: any) => !v.checked
+                                                )
+                                            )}
+                                        >
+                                            Request review
+                                        </Button>
+                                    )}
+
+                                    {permission.CAN_APPROVE && (
+                                        <Button
+                                            onClick={createActionHandler(
+                                                approveHandler,
+                                                form
+                                            )}
+                                            disabled={Boolean(
+                                                state.task?.key_results?.find(
+                                                    (v: any) => !v.checked
+                                                )
+                                            )}
+                                        >
+                                            Approve
+                                        </Button>
+                                    )}
+                                </div>
+                            )}
+                        />
+                    </div>
+
                     <Form.Item
                         label="Task"
                         name="name"
@@ -327,78 +453,68 @@ function TaskDetailPage(props: { dao: string; task: string }) {
 
                     <Form.Item label="Activity">
                         <Timeline
-                            style={{ marginTop: 12 }}
-                            items={state.task.changes?.map((v) => ({
-                                children: <>{v.log}</>,
-                            }))}
+                            style={{ marginTop: 12, pointerEvents: "auto" }}
+                            items={
+                                [
+                                    ...state.activityList.map((v) => {
+                                        let node = null;
+
+                                        if (v.type === "change" && v.change) {
+                                            node = <>{v.change.log}</>;
+                                        }
+
+                                        if (v.type === "comment" && v.comment) {
+                                            node = (
+                                                <>
+                                                    <UIUserInfo
+                                                        id={v.comment.creator_id}
+                                                        render={(user) =>
+                                                            `${user.name} @${user.account}`
+                                                        }
+                                                    />
+                                                    {' comment <'}
+                                                    {v.comment.content}
+                                                    {'> at '}
+                                                    {v.comment.created_at}
+                                                </>
+                                            );
+                                        }
+
+                                        return { children: node };
+                                    }),
+
+                                    permission.CAN_COMMENT && {
+                                        children: (
+                                            <Space
+                                                direction="vertical"
+                                                style={{ display: "flex" }}
+                                            >
+                                                <Input.TextArea
+                                                    placeholder="write comment"
+                                                    autoSize={{ minRows: 4 }}
+                                                    value={
+                                                        state.comment.content
+                                                    }
+                                                    onChange={
+                                                        commentChangeHandler
+                                                    }
+                                                />
+
+                                                <Button
+                                                    type="primary"
+                                                    onClick={
+                                                        commentSubmitHandler
+                                                    }
+                                                >
+                                                    Comment
+                                                </Button>
+                                            </Space>
+                                        ),
+                                    },
+                                ].filter(Boolean) as any[]
+                            }
                         />
                     </Form.Item>
-
-                    <Form.Item
-                        noStyle
-                        shouldUpdate
-                        children={(form) => (
-                            <div className="footer">
-                                <Button onClick={popRoute}>Back</Button>
-
-                                {permission.CAN_ASSIGN && (
-                                    <Button
-                                        type="primary"
-                                        onClick={createActionHandler(
-                                            assignHandler,
-                                            form
-                                        )}
-                                    >
-                                        Request assign
-                                    </Button>
-                                )}
-
-                                {permission.CAN_UPDATE && (
-                                    <Button
-                                        type="primary"
-                                        onClick={createActionHandler(
-                                            updateHandler,
-                                            form
-                                        )}
-                                    >
-                                        Update
-                                    </Button>
-                                )}
-
-                                {permission.CAN_REVIEW && (
-                                    <Button
-                                        onClick={createActionHandler(
-                                            reviewHandler,
-                                            form
-                                        )}
-                                        disabled={Boolean(
-                                            state.task?.key_results?.find(
-                                                (v: any) => !v.checked
-                                            )
-                                        )}
-                                    >
-                                        Request review
-                                    </Button>
-                                )}
-
-                                {permission.CAN_APPROVE && (
-                                    <Button
-                                        onClick={createActionHandler(
-                                            approveHandler,
-                                            form
-                                        )}
-                                        disabled={Boolean(
-                                            state.task?.key_results?.find(
-                                                (v: any) => !v.checked
-                                            )
-                                        )}
-                                    >
-                                        Approve
-                                    </Button>
-                                )}
-                            </div>
-                        )}
-                    />
                 </Form>
             </Card>
         </UICSSWidget>

@@ -24,9 +24,14 @@ const APP_ROUTES = [
 
     //#region task
     require("../controllers/dao/task/create-dao-task"),
+    require("../controllers/dao/task/get-dao-task-activity-list"),
     require("../controllers/dao/task/get-dao-task-list"),
     require("../controllers/dao/task/get-dao-task"),
     require("../controllers/dao/task/update-dao-task"),
+    //#endregion
+
+    //#region comment
+    require("../controllers/dao/task/comment/create-dao-task-comment"),
     //#endregion
 ];
 

@@ -47,6 +47,12 @@ namespace Entity {
         assignee?: User;
         changes?: Prisma.TaskChange[];
     }
+
+    interface Activity {
+        type: "change" | "comment";
+        change?: Prisma.TaskChange;
+        comment?: Prisma.TaskComment;
+    }
 }
 
 type Nullable<T> = T | null;

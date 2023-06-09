@@ -61,6 +61,14 @@ function CreateTaskPage(props: { dao: string }) {
 
             <Card className="content">
                 <Form layout="vertical" onFinish={createHandler}>
+                    <div className="toolbar">
+                        <Button onClick={popRoute}>Back</Button>
+
+                        <Button htmlType="submit" type="primary">
+                            Create
+                        </Button>
+                    </div>
+
                     <Form.Item
                         label="Task"
                         name="name"
@@ -146,12 +154,6 @@ function CreateTaskPage(props: { dao: string }) {
                             </Form.Item>
                         )}
                     />
-
-                    <div className="footer">
-                        <Button htmlType="submit" type="primary">
-                            Create
-                        </Button>
-                    </div>
                 </Form>
             </Card>
         </UICSSWidget>
