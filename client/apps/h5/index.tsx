@@ -1,5 +1,10 @@
 function H5App() {
-    return <> h5 app </>;
+    return (
+        <>
+            mobile support is coming soon, please use desktop browser to
+            continue
+        </>
+    );
 }
 
 export { H5App };
