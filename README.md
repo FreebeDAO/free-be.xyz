@@ -1,4 +1,4 @@
-## 开发
+## 开发环境
 
 ```sh
 # 安装依赖
@@ -7,7 +7,7 @@ yarn
 yarn dev
 ```
 
-## 部署
+## 正式环境
 
 ```sh
 # 安装脚本
@@ -16,4 +16,10 @@ yarn
 yarn build
 # 启动服务
 yarn serve
+```
+
+## 环境变量
+
+```sh
+cp .env .env.local
 ```
