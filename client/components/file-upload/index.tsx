@@ -1,5 +1,5 @@
 import { Upload } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { upload } from "../../services/tencent";
 import { Props } from "./type";
 
@@ -20,6 +20,12 @@ function UIFileUpload({
             url: file,
         })),
     });
+
+    useEffect(() => {
+        if (onChange) {
+            onChange(value.filter(Boolean));
+        }
+    }, []);
 
     return (
         <Upload
